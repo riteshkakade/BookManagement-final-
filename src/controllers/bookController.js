@@ -79,7 +79,9 @@ const createBook = async function(req, res) {
         newBook.category=category
 
         //validating subcategory
-    
+        if(!isValid(subcategory)){
+            return res.status(400).send({status:false,message:"subcategory is required!"})
+        }
            
        if(Array.isArray(subcategory)){
            let result=checkarray(subcategory)

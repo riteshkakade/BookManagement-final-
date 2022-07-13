@@ -115,14 +115,14 @@ const login = async function (req, res) {
 
         let password = data.password
         if (!isValid(password)) {
-            return res.status(400).send({ status: false, message: "email is required" })
+            return res.status(400).send({ status: false, message: "password is required" })
         }
 
         if (!checkPassword(password)) {
             return res.status(400).send({ status: false, message: "password length should be between 8-15 characters" })
         }
 
-        var loginUser = await user.findOne({ email: email, password: password })
+        const loginUser = await user.findOne({ email: email, password: password })
         if (!loginUser) {
             return res.status(401).send({ status: false, message: "login Credentials are wrong" }) //login email and password does not match validation.
         }
