@@ -23,5 +23,5 @@ router.post('/books/:bookId/review',reviewController.createReview)
 router.put('/books/:bookId/review/:reviewId',reviewController.updateReviewById)
 router.delete('/books/:bookId/review/:reviewId',reviewController.deleteReviewById)
 
-
+router.post('/addbookcover',bookController.addbookcover)
 module.exports = router;

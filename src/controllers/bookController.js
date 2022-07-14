@@ -1,6 +1,7 @@
 const bookModel=require("../models/bookModel")
 const userModel=require("../models/userModel")
 const reviewModel=require("../models/reviewModel")
+const aws= require("aws-sdk")
 const jwt=require("jsonwebtoken")
 const {isValid, 
     isValidName,
@@ -17,8 +18,60 @@ checkarray,
 isValidDate}=require("../validator/validator")
 const { type } = require("express/lib/response")
 
+aws.config.update({
+    accessKeyId: "AKIAY3L35MCRVFM24Q7U",
+    secretAccessKey: "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",
+    region: "ap-south-1"
+})
 
+let uploadFile= async ( file) =>{
+    return new Promise( function(resolve, reject) {
+        
+     // this function will upload file to aws and return the link
+     let s3= new aws.S3({apiVersion: '2006-03-01'}); // we will be using the s3 service of aws
+     
+     var uploadParams= {
+         ACL: "public-read",
+         Bucket: "classroom-training-bucket",  //HERE
+         Key: "abc/" + file.originalname, //HERE 
+         Body: file.buffer
+     }
+ 
+ 
+     s3.upload( uploadParams, function (err, data ){
+         if(err) {
+             return reject({"error": err})
+         }
+         console.log(data)
+         console.log("file uploaded succesfully")
+         return resolve(data.Location)
+     })})
+    }
 
+    const addbookcover=async function(req,res){
+        try{
+            let files= req.files
+           // console.log(files)
+       if(files && files.length>0){
+           //console.log("hhh")
+           //upload to s3 and get the uploaded link
+           // res.send the link back to frontend/postman
+           let uploadedFileURL= await uploadFile( files[0] )
+           //console.log(uploadedFileURL)
+           res.status(201).send({msg: "file uploaded succesfully", data: uploadedFileURL})
+       }
+       else{
+           res.status(400).send({ msg: "No file found" })
+       }
+
+    
+        }
+        catch (error) {
+            //console.log("hello")
+           // console.log(error.message)
+            res.status(500).send({status : false,message : error.message})
+        }
+    }
 
 //<<----------------------------------------------create book--------------------------------------------->>
 const createBook = async function(req, res) {
@@ -111,6 +164,7 @@ const createBook = async function(req, res) {
        }
        newBook.releasedAt=releasedAt
 
+     
        //Creating book
         const newbook = await bookModel.create(newBook)
         res.status(201).send({status : true,message:"success",data : newbook})
@@ -118,6 +172,7 @@ const createBook = async function(req, res) {
         res.status(500).send({status : false,message : error.message})
     }
 }
+
 
 
 //<<-----------------------------------------------get book-------------------------------------------------->>
@@ -291,5 +346,5 @@ const deleteBookById = async function(req, res) {
         message: error.message}) 
     }
 }
-module.exports={createBook,getBooks,getBookById,updateBookById,deleteBookById}
+module.exports={createBook,getBooks,getBookById,updateBookById,deleteBookById,addbookcover}
 

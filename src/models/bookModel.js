@@ -51,6 +51,9 @@ const bookSchema=new mongoose.Schema({
     isDeleted:{
         type:Boolean,
         default:false
+    },
+    bookCover:{
+        type:String
     }
 
 },{timestamps:true})
