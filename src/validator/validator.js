@@ -2,13 +2,11 @@ const mongoose=require("mongoose")
 const isValid = function (value) {
     if (typeof value == "undefined" || value == null) return false;
     if (typeof value == "string" && value.trim().length == 0) return false;
+    //if (typeof value == "number" && value.toString.trim().length == 0) return false;
     if (typeof value !== "string") return false;
     return true;
   };
 
-  const isValidName = function (name) {
-    return /^[A-Za-z]+$/.test(name);
-  };
   
   const isValidRequest = function (data) {
     if (Object.keys(data).length == 0) return false;
@@ -87,7 +85,6 @@ const isValidRating=function(rating){
 }
   module.exports = {
     isValid,
-    isValidName,
     isValidRequest,
     isValidMail,
     isValidMobile,

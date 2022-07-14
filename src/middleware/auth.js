@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
-const user = require("../models/userModel")
-const book=require("../models/bookModel")
+const userModel = require("../models/userModel")
+const bookModel=require("../models/bookModel")
 const { isValid, isValidObjectId } = require("../validator/validator");
 //const { getBookById } = require("../controllers/bookController");
 
@@ -37,7 +37,7 @@ const createAuthorize=async function(req,res,next){
             return res.status(400).send({ status: false, message: "invalid userId" })
         }
 
-        const userExist = await user.findOne({_id:userId,isDeleted:false})
+        const userExist = await userModel.findOne({_id:userId,isDeleted:false})
         if (!userExist) {
             return res.status(404).send({
                 status: false,
@@ -75,7 +75,7 @@ const authorization = async function (req, res, next) {
             return res.status(400).send({ status: false, message: "invalid bookId" })
         }
 
-        const bookExist = await book.findOne({_id:bookId,isDeleted:false})
+        const bookExist = await bookModel.findOne({_id:bookId,isDeleted:false})
         if (!bookExist) {
             return res.status(404).send({
                 status: false,

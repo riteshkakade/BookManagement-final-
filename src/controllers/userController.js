@@ -1,5 +1,5 @@
 const jwt=require("jsonwebtoken")
-const user = require("../models/userModel")
+const userModel = require("../models/userModel")
 const { isValid,
     isValidName,
     isValidRequest,
@@ -60,7 +60,7 @@ const registerUser = async function (req, res) {
             return res.status(400).send({ status: false, message: "Please enter a valid email" })
         }
 
-        const ifAlreadyExist = await user.findOne({ $or: [{ email: email }, { phone: phone }] })
+        const ifAlreadyExist = await userModel.findOne({ $or: [{ email: email }, { phone: phone }] })
         
 
         if (ifAlreadyExist) {
@@ -84,7 +84,7 @@ const registerUser = async function (req, res) {
         newuser.address = address}
 
 
-        const newUser = await user.create(data)
+        const newUser = await userModel.create(data)
         res.status(201).send({ status: true, message: "success", data: newUser })
 
 
@@ -122,7 +122,7 @@ const login = async function (req, res) {
             return res.status(400).send({ status: false, message: "password length should be between 8-15 characters" })
         }
 
-        const loginUser = await user.findOne({ email: email, password: password })
+        const loginUser = await userModel.findOne({ email: email, password: password })
         if (!loginUser) {
             return res.status(401).send({ status: false, message: "login Credentials are wrong" }) //login email and password does not match validation.
         }
@@ -134,7 +134,7 @@ const login = async function (req, res) {
                 }, "pro@3",{expiresIn: '10h'}
         )
         res.setHeader("x-api-key", token)
-        res.status(201).send({ status: true, message: 'Success', data: token }) //creating jwt after successful login by author
+        res.status(201).send({ status: true, message: 'Success', data: {token} }) //creating jwt after successful login by author
 
     }
     catch (err) {

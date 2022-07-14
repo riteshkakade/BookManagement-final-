@@ -45,7 +45,7 @@ const createReview = async (req, res) => {
         //validating reviewer's name
         
         if(!isValid(reviewedBy)){
-           // return res.status(400).send({ status: false, message: "name of the reviewer is required" }) 
+           
            newreview.reviewedBy='Guest'
         }
 
@@ -62,6 +62,11 @@ const createReview = async (req, res) => {
         if(!rating){
             return res.status(400).send({ status: false, message: "rating is required" }) 
         }
+       
+         if(isNaN(Number(rating))){
+            return res.status(400).send({ status: false, message: "rating should be a valid number between 1-5" }) 
+           }
+
         if(!isValidRating(rating)){
             return res.status(400).send({ status: false, message: "rating should be between 1-5" }) 
         }
@@ -140,8 +145,11 @@ const updateReviewById = async (req, res) => {
         }
         update.reviewedBy=reviewedBy
     }
-//console.log(typeof(rating))
-    if(typeof(rating)!==undefined){
+
+    if(rating){
+           if(!isNaN(Number(rating))){
+            return res.status(400).send({ status: false, message: "rating should be a valid number between 1-5" }) 
+           }
         if(!isValidRating(rating)){
             return res.status(400).send({ status: false, message: "rating should be between 1-5" }) 
         }
