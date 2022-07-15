@@ -51,14 +51,14 @@ let uploadFile= async ( file) =>{
     const addbookcover=async function(req,res){
         try{
             let files= req.files
-           // console.log(files)
+         
        if(files && files.length>0){
-           //console.log("hhh")
            //upload to s3 and get the uploaded link
            // res.send the link back to frontend/postman
            let uploadedFileURL= await uploadFile( files[0] )
-           //console.log(uploadedFileURL)
-           res.status(201).send({msg: "file uploaded succesfully", data: uploadedFileURL})
+           let bookId=req.params.bookId
+           let updatedBook=await bookModel.findOneAndUpdate({_id:bookId,isDeleted:false},{$set:{bookCover:uploadedFileURL}})
+           res.status(201).send({status:true,message: "file uploaded succesfully", data: updatedBook})
        }
        else{
            res.status(400).send({ msg: "No file found" })
