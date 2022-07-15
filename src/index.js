@@ -1,16 +1,16 @@
 const express=require('express')
 var bodyParser = require("body-parser");
-const multer= require("multer");
+//const multer= require("multer");
 const { default: mongoose } = require("mongoose");
 const route = require("./routes/route.js");
-const { AppConfig } = require('aws-sdk');
+//const { AppConfig } = require('aws-sdk');
 
 
 const app=express()
 
 app.use(bodyParser.json()); // tells the system that you want json to be used
 app.use(bodyParser.urlencoded({ extended: true })); // It is a inbuilt method in express to recognize the incoming Request Object as strings or arrays
-app.use( multer().any())
+//app.use( multer().any())
 
 // mongoDb connection
 mongoose
